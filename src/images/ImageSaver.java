@@ -1,4 +1,4 @@
-package sample;
+package images;
 /**
  * Created by roberto on 06.10.15.
  */
@@ -48,7 +48,7 @@ public class ImageSaver extends Application {
 
         VBox root = new VBox(menuBar, canvas);
 
-        scene = new Scene(root, 600, 425);
+        scene = new Scene(root, 640, 480);
 
         canvas.widthProperty().bind(scene.widthProperty());
         canvas.heightProperty().bind(scene.heightProperty().subtract(menuBar.heightProperty()));

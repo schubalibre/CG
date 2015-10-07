@@ -25,9 +25,7 @@ public class Mat3x3 {
 
     final public double determinante;
 
-    public Mat3x3(final double m11, final double m12, final double m13,
-                  final double m21, final double m22, final double m23,
-                  final double m31, final double m32, final double m33){
+    public Mat3x3(final double m11, final double m12, final double m13, final double m21, final double m22, final double m23, final double m31, final double m32, final double m33) {
         this.m11 = m11;
         this.m12 = m12;
         this.m13 = m13;
@@ -40,9 +38,9 @@ public class Mat3x3 {
         this.determinante = this.det();
     }
 
-    public Mat3x3 mul(Mat3x3 m){
+    public Mat3x3 mul(Mat3x3 m) {
 
-        if(m == null) throw new IllegalArgumentException("The parameter 'matB' must not be null.");
+        if (m == null) throw new IllegalArgumentException("The parameter 'matB' must not be null." );
 
         return new Mat3x3(
                 m11 * m.m11 + m12 * m.m21 + m13 * m.m31,
@@ -59,9 +57,9 @@ public class Mat3x3 {
         );
     }
 
-    public Vector3 mul(Vector3 v){
+    public Vector3 mul(Vector3 v) {
 
-        if(v == null) throw new IllegalArgumentException("The parameter 'vec3' must not be null.");
+        if (v == null) throw new IllegalArgumentException("The parameter 'vec3' must not be null." );
 
         return new Vector3(
                 m11 * v.x + m12 * v.y + m13 * v.z,
@@ -70,9 +68,9 @@ public class Mat3x3 {
         );
     }
 
-    public Point3 mul(Point3 p){
+    public Point3 mul(Point3 p) {
 
-        if(p == null) throw new IllegalArgumentException("The parameter 'point3' must not be null.");
+        if (p == null) throw new IllegalArgumentException("The parameter 'point3' must not be null." );
 
         return new Point3(
                 m11 * p.x + m12 * p.y + m13 * p.z,
@@ -81,7 +79,7 @@ public class Mat3x3 {
         );
     }
 
-    public Mat3x3 changeCol1(Vector3 v){
+    public Mat3x3 changeCol1(Vector3 v) {
         return new Mat3x3(
                 v.x, m12, m13,
                 v.y, m22, m23,
@@ -89,7 +87,7 @@ public class Mat3x3 {
         );
     }
 
-    public Mat3x3 changeCol2(Vector3 v){
+    public Mat3x3 changeCol2(Vector3 v) {
         return new Mat3x3(
                 m11, v.x, m13,
                 m21, v.y, m23,
@@ -97,7 +95,7 @@ public class Mat3x3 {
         );
     }
 
-    public Mat3x3 changeCol3(Vector3 v){
+    public Mat3x3 changeCol3(Vector3 v) {
         return new Mat3x3(
                 m11, m12, v.x,
                 m21, m22, v.y,
@@ -106,12 +104,12 @@ public class Mat3x3 {
     }
 
     private double det() {
-        return   m11*m22*m33
-                +m12*m23*m31
-                +m13*m21*m32
-                -m11*m23*m32
-                -m12*m21*m33
-                -m13*m22*m31;
+        return m11 * m22 * m33
+                + m12 * m23 * m31
+                + m13 * m21 * m32
+                - m11 * m23 * m32
+                - m12 * m21 * m33
+                - m13 * m22 * m31;
     }
 
     @Override
@@ -178,7 +176,7 @@ public class Mat3x3 {
     }
 
     public static void main(String[] args) {
-        Mat3x3 a = new Mat3x3(1, 2, 3, 4, 5, 6, 7 , 8, 9);
+        Mat3x3 a = new Mat3x3(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
         Mat3x3 b = new Mat3x3(0, 0, 1, 0, 1, 0, 1, 0, 0);
 

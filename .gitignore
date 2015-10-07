@@ -101,5 +101,7 @@ local.properties
 .recommenders
 .classpath
 
-# intelliJ plugin
-.idea
+# Intellij
+.idea/
+*.iml
+*.iws

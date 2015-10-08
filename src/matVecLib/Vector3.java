@@ -1,5 +1,7 @@
 package matVecLib;
 
+import java.util.Vector;
+
 /**
  * Created by roberto on 07/10/15.
  */
@@ -18,6 +20,82 @@ public class Vector3 {
         this.y = y;
         this.z = z;
         this.magnitude = Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
+    }
+
+    public Vector3 add(Vector3 v){
+        if (v == null) throw new IllegalArgumentException("The parameter 'v' must not be null." );
+        return new Vector3(
+                x + v.x,
+                y + v.y,
+                z + v.z
+        );
+    }
+
+    public Vector3 add(Normal3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        return new Vector3(
+                x + n.x,
+                y + n.y,
+                z + n.z
+        );
+    }
+
+    public Vector3 sub(Normal3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        return new Vector3(
+                x - n.x,
+                y - n.y,
+                z - n.z
+        );
+    }
+
+    public Vector3 mul(double c){
+        return new Vector3(
+                x * c,
+                y * c,
+                z * c
+        );
+    }
+
+    public double dot(Vector3 v){
+        if (v == null) throw new IllegalArgumentException("The parameter 'v' must not be null." );
+        return x * v.x + y * v.y + z * v.z;
+    }
+
+    public double dot(Normal3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        return x * n.x + y * n.y + z * n.z;
+    }
+
+    public Vector3 normalized(){
+        return new Vector3(
+                x/magnitude,
+                y/magnitude,
+                z/magnitude
+        );
+    }
+
+    public Normal3 asNormal(){
+        return new Normal3(x,y,z);
+    }
+
+    public Vector3 reflectedOn(Normal3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        // 2*(V dot N)*N - V
+        return new Vector3(
+                -2 * this.dot(n) * n.x + this.x,
+                -2 * this.dot(n) * n.y + this.y,
+                -2 * this.dot(n) * n.z + this.z
+        );
+    }
+
+    public Vector3 x(Vector3 v){
+        if (v == null) throw new IllegalArgumentException("The parameter 'v' must not be null." );
+        return new Vector3(
+                y * v.z - z * v.y,
+                z * v.x - x * v.z,
+                x * v.y - y * v.x
+        );
     }
 
     @Override
@@ -58,4 +136,17 @@ public class Vector3 {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+    public static void main(String[] args) {
+
+        Vector3 v = new Vector3(-0.707, 0.707, 0);
+
+        Normal3 n = new Normal3(1,0,0);
+
+        System.out.println(v);
+        System.out.println(n);
+        System.out.println(v.reflectedOn(n));
+
+    }
+
 }

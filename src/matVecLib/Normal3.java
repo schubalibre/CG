@@ -17,6 +17,28 @@ public class Normal3 {
         this.z = z;
     }
 
+    public Normal3 mul(double n){
+        return new Normal3(
+                x * n,
+                y * n,
+                z * n
+        );
+    }
+
+    public Normal3 add(Normal3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        return new Normal3(
+                x + n.x,
+                y + n.y,
+                z + n.z
+        );
+    }
+
+    public double dot(Vector3 v){
+        if (v == null) throw new IllegalArgumentException("The parameter 'v' must not be null." );
+        return x * v.x + y * v.y + z * v.z;
+    }
+
     @Override
     public String toString() {
         return "Normal3{" +

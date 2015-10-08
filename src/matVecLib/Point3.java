@@ -17,6 +17,33 @@ public class Point3 {
         this.z = z;
     }
 
+    public Point3 add(Vector3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        return new Point3(
+                x + n.x,
+                y + n.y,
+                z + n.z
+        );
+    }
+
+    public Vector3 sub(Point3 p){
+        if (p == null) throw new IllegalArgumentException("The parameter 'p' must not be null." );
+        return new Vector3(
+                x - p.x,
+                y - p.y,
+                z - p.z
+        );
+    }
+
+    public Point3 sub(Vector3 n){
+        if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
+        return new Point3(
+                x - n.x,
+                y - n.y,
+                z - n.z
+        );
+    }
+
     @Override
     public String toString() {
         return "Point3{" +

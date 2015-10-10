@@ -6,10 +6,10 @@ package matVecLib;
 public class Main {
 
     public static void main(String[] args) {
-        testNormal3();
+        test1();
     }
 
-    private static void testNormal3() {
+    private static void test1() {
 
         Normal3 n = new Normal3(1,2,3);
 

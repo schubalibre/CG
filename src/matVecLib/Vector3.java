@@ -1,5 +1,7 @@
 package matVecLib;
 
+import org.junit.internal.AssumptionViolatedException;
+
 import java.util.Vector;
 
 /**
@@ -43,9 +45,9 @@ public class Vector3 {
     public Vector3 sub(Normal3 n){
         if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
         return new Vector3(
-                x - n.x,
-                y - n.y,
-                z - n.z
+                 x - n.x,
+                 y - n.y,
+                 z - n.z
         );
     }
 
@@ -81,12 +83,8 @@ public class Vector3 {
 
     public Vector3 reflectedOn(Normal3 n){
         if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
-        // 2*(V dot N)*N - V
-        return new Vector3(
-                -2 * this.dot(n) * n.x + this.x,
-                -2 * this.dot(n) * n.y + this.y,
-                -2 * this.dot(n) * n.z + this.z
-        );
+
+        return this.sub(n.mul(2.0).mul(n.dot(this)));
     }
 
     public Vector3 x(Vector3 v){
@@ -139,14 +137,13 @@ public class Vector3 {
 
     public static void main(String[] args) {
 
-        Vector3 v = new Vector3(-0.707, 0.707, 0);
-
+        Vector3 v = new Vector3(0.707, 0.707, 0);
         Normal3 n = new Normal3(1,0,0);
+        // V - (2.0 * dot(N, V) * N).
+        System.out.println((2*v.dot(n)*n.x) - v.x);
+        System.out.println((2*v.dot(n)*n.y) - v.y);
+        System.out.println((2*v.dot(n)*n.z) - v.z);
 
-        System.out.println(v);
-        System.out.println(n);
         System.out.println(v.reflectedOn(n));
-
     }
-
 }

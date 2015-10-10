@@ -53,11 +53,11 @@ public class Normal3 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Point3 point3 = (Point3) o;
+        Normal3 normal3 = (Normal3) o;
 
-        if (Double.compare(point3.x, x) != 0) return false;
-        if (Double.compare(point3.y, y) != 0) return false;
-        return Double.compare(point3.z, z) == 0;
+        if (Double.compare(normal3.x, x) != 0) return false;
+        if (Double.compare(normal3.y, y) != 0) return false;
+        return Double.compare(normal3.z, z) == 0;
 
     }
 

@@ -4,28 +4,31 @@ package images;
  */
 
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
 import java.io.File;
 
 
 public class ImageSaver extends Application {
 
-    private Canvas canvas;
     private Scene scene;
-    private MenuBar menuBar;
+    private BorderPane root;
 
     public static void main(String[] args) {
         launch(args);
@@ -33,6 +36,18 @@ public class ImageSaver extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        root = new BorderPane();
+
+        scene = new Scene(root, 640, 530);
+
+        scene.widthProperty().addListener(e->{
+            //drawImage();
+        });
+
+        scene.heightProperty().addListener(e->{
+            //drawImage();
+        });
 
         MenuItem save = new MenuItem("save");
 
@@ -42,39 +57,76 @@ public class ImageSaver extends Application {
 
         fileMenu.getItems().add(save);
 
-        menuBar = new MenuBar(fileMenu);
+        MenuBar menuBar = new MenuBar(fileMenu);
 
-        canvas = new Canvas();
+        root.setTop(menuBar);
 
-        VBox root = new VBox(menuBar, canvas);
+        drawImage();
 
-        scene = new Scene(root, 640, 480);
+        primaryStage.setTitle("Save Image");
 
-        canvas.widthProperty().bind(scene.widthProperty());
-        canvas.heightProperty().bind(scene.heightProperty().subtract(menuBar.heightProperty()));
-
-        scene.widthProperty().addListener(e->{
-            drawImages(canvas.getGraphicsContext2D());
-        });
-
-        scene.heightProperty().addListener(e->{
-            drawImages(canvas.getGraphicsContext2D());
-        });
-
-        primaryStage.setTitle("Hello World");
         primaryStage.setScene(scene);
 
-        drawImages(canvas.getGraphicsContext2D());
         primaryStage.show();
     }
 
-    private void drawImages(final GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(1);
-        gc.strokeLine(0, 0, canvas.getWidth(), canvas.getHeight());
+    private void drawImage() {
+
+        ImageView imageView = new ImageView();
+
+        WritableImage wImage = new WritableImage((int) root.getWidth(), (int) root.getHeight() - 50);
+
+        PixelWriter pixelWriter = wImage.getPixelWriter();
+
+        imageView.setImage(wImage);
+
+        root.setCenter(imageView);
+
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+
+                for (int readY = 0; readY < wImage.getHeight(); readY++) {
+                    for (int readX = 0; readX < wImage.getWidth(); readX++) {
+
+                        final int finalReadX = readX, finalReadY = readY;
+
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                pixelWriter.setColor(finalReadX, finalReadY, getColor(finalReadX, finalReadY));
+                            }
+                        });
+
+                        if (isCancelled()) {
+                            break;
+                        }
+
+                        try {
+                            Thread.sleep(0,1);
+                        } catch (InterruptedException interrupted) {
+                            System.out.println("Abbruch");
+                        }
+                    }
+                    updateProgress(readY, wImage.getHeight());
+                }
+
+                return null;
+            }
+        };
+
+        ProgressBar bar = new ProgressBar();
+        bar.progressProperty().bind(task.progressProperty());
+        root.setBottom(bar);
+
+        Thread t = new Thread(task);
+        t.setDaemon(true);
+        t.start();
     }
+
+    private Color getColor(int readX, int readY) {
+        return (readX == readY) ? Color.RED : Color.BLACK;
+    }
+
 
     private void saveImage(final Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
@@ -87,11 +139,11 @@ public class ImageSaver extends Application {
     }
 
     private void saveFile(final File file) {
-        WritableImage wim = canvas.snapshot(null, null);
+        /*WritableImage wim = canvas.snapshot(null, null);
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
         } catch (Exception e) {
             System.out.println("Konnte Datei nicht speichern!");
-        }
+        }*/
     }
 }

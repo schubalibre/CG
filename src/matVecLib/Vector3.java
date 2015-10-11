@@ -84,7 +84,7 @@ public class Vector3 {
     public Vector3 reflectedOn(Normal3 n){
         if (n == null) throw new IllegalArgumentException("The parameter 'n' must not be null." );
 
-        return this.sub(n.mul(2.0).mul(n.dot(this)));
+        return this.add(n.mul(-2.0).mul(n.dot(this)));
     }
 
     public Vector3 x(Vector3 v){

@@ -6,7 +6,6 @@ package images;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -16,8 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -85,8 +82,10 @@ public class ImageSaver extends Application {
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                System.out.println(getCore());
 
                 for (int readY = 0; readY < wImage.getHeight(); readY++) {
+
                     for (int readX = 0; readX < wImage.getWidth(); readX++) {
 
                         final int finalReadX = readX, finalReadY = readY;
@@ -102,14 +101,13 @@ public class ImageSaver extends Application {
                         }
 
                         try {
-                            Thread.sleep(0,1);
+                            Thread.sleep(1);
                         } catch (InterruptedException interrupted) {
                             System.out.println("Abbruch");
                         }
                     }
                     updateProgress(readY, wImage.getHeight());
                 }
-
                 return null;
             }
         };
@@ -118,9 +116,26 @@ public class ImageSaver extends Application {
         bar.progressProperty().bind(task.progressProperty());
         root.setBottom(bar);
 
-        Thread t = new Thread(task);
-        t.setDaemon(true);
-        t.start();
+        int cores = Runtime.getRuntime().availableProcessors();
+
+        setCores(cores);
+
+        for(int core =1; core <= cores; core++) {
+            Thread t = new Thread(task);
+            t.setDaemon(true);
+            t.start();
+        }
+    }
+
+    private int cores;
+
+    final private void setCores(int cores){
+        this.cores=cores+1;
+    }
+
+    final private int getCore(){
+        cores--;
+        return cores;
     }
 
     private Color getColor(int readX, int readY) {

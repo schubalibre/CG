@@ -7,14 +7,12 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,6 +24,8 @@ public class ImageSaver extends Application {
 
     private Scene scene;
     private BorderPane root;
+    public static int counter = 0;
+    public static long startTime;
 
     public static void main(String[] args) {
         launch(args);
@@ -73,75 +73,31 @@ public class ImageSaver extends Application {
 
         WritableImage wImage = new WritableImage((int) root.getWidth(), (int) root.getHeight() - 50);
 
-        PixelWriter pixelWriter = wImage.getPixelWriter();
-
         imageView.setImage(wImage);
 
         root.setCenter(imageView);
 
-        Task task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                System.out.println(getCore());
-
-                for (int readY = 0; readY < wImage.getHeight(); readY++) {
-
-                    for (int readX = 0; readX < wImage.getWidth(); readX++) {
-
-                        final int finalReadX = readX, finalReadY = readY;
-
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                pixelWriter.setColor(finalReadX, finalReadY, getColor(finalReadX, finalReadY));
-                            }
-                        });
-
-                        if (isCancelled()) {
-                            break;
-                        }
-
-                        try {
-                            Thread.sleep(1);
-                        } catch (InterruptedException interrupted) {
-                            System.out.println("Abbruch");
-                        }
-                    }
-                    updateProgress(readY, wImage.getHeight());
-                }
-                return null;
-            }
-        };
-
-        ProgressBar bar = new ProgressBar();
-        bar.progressProperty().bind(task.progressProperty());
-        root.setBottom(bar);
-
         int cores = Runtime.getRuntime().availableProcessors();
 
-        setCores(cores);
+        Renderer task = null;
 
-        for(int core =1; core <= cores; core++) {
+        startTime = System.currentTimeMillis();
+
+        for(int core = 1; core <= cores;core++) {
+
+            task = new Renderer(wImage, cores, core);
+
             Thread t = new Thread(task);
             t.setDaemon(true);
             t.start();
         }
+
+        ProgressBar bar = new ProgressBar();
+        bar.progressProperty().bind(task.progressProperty());
+        Label label = new Label();
+        label.textProperty().bind(task.messageProperty());
+        root.setBottom(new HBox(bar,label));
     }
-
-    private int cores;
-
-    final private void setCores(int cores){
-        this.cores=cores+1;
-    }
-
-    final private int getCore(){
-        cores--;
-        return cores;
-    }
-
-    private Color getColor(int readX, int readY) {
-        return (readX == readY) ? Color.RED : Color.BLACK;
-    }
-
 
     private void saveImage(final Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();

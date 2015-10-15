@@ -29,12 +29,15 @@ public class Renderer extends Task {
     @Override
     protected Object call() throws Exception {
 
-        final double max_height = wImage.getHeight() / cores;
-        final double max_width = wImage.getWidth();
+        final double img_height = wImage.getHeight();
+        final double img_width = wImage.getWidth();
+        final double img_size = img_height * img_width;
+
+        final double max_height = img_height / cores;
 
         for (double readY = ( max_height * core) - max_height; readY < max_height * core; readY++) {
 
-            for (double readX = 0; readX < max_width; readX++) {
+            for (double readX = 0; readX < img_width; readX++) {
 
                 final double finalReadX = readX, finalReadY = readY;
 
@@ -43,16 +46,8 @@ public class Renderer extends Task {
 
                         pixelWriter.setColor((int)finalReadX, (int)finalReadY, getColor(finalReadX, finalReadY));
 
-                        updateProgress(ImageSaver.counter++, wImage.getHeight() * wImage.getWidth());
-
-                        long elapsedTime = (System.currentTimeMillis() - ImageSaver.startTime) / 1000;
-
-                        // counter / elapsedTime = maxCounter / estimatedTime
-
-                        long estimatedTime = (long)((double)elapsedTime / ImageSaver.counter *  (wImage.getHeight() * wImage.getWidth()));
-
-                        updateMessage("elapsed Time: " + elapsedTime + "sec. estimated Time: " + estimatedTime + " sec.");
-
+                        updateProgress(ImageSaver.counter++, img_size);
+                        updateTime(img_size);
                     }
                 });
 
@@ -69,6 +64,17 @@ public class Renderer extends Task {
 
         }
         return null;
+    }
+
+    private void updateTime(double img_size) {
+
+        long elapsedTime = (System.currentTimeMillis() - ImageSaver.startTime) / 1000;
+
+        // counter / elapsedTime = maxCounter / estimatedTime
+
+        long estimatedTime = (long)((double)elapsedTime / ImageSaver.counter * (img_size));
+
+        updateMessage("elapsed Time: " + elapsedTime + "sec. estimated Time: " + estimatedTime + " sec.");
     }
 
     private Color getColor(double readX, double readY) {

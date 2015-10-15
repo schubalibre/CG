@@ -4,28 +4,34 @@ package images;
  */
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 
 public class ImageSaver extends Application {
 
     private Scene scene;
     private BorderPane root;
-    public static int counter = 0;
-    public static long startTime;
+    protected static int counter = 0;
+    protected static long startTime;
+    private WritableImage wImage = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -38,13 +44,24 @@ public class ImageSaver extends Application {
 
         scene = new Scene(root, 640, 530);
 
-        scene.widthProperty().addListener(e->{
-            //drawImage();
+        /*scene.widthProperty().addListener(e->{
+            drawImage();
         });
 
         scene.heightProperty().addListener(e->{
-            //drawImage();
-        });
+            drawImage();
+        });*/
+
+        setScene(primaryStage);
+
+        primaryStage.setTitle("Save Image");
+
+        primaryStage.setScene(scene);
+
+        primaryStage.show();
+    }
+
+    private void setScene(Stage primaryStage){
 
         MenuItem save = new MenuItem("save");
 
@@ -59,23 +76,22 @@ public class ImageSaver extends Application {
         root.setTop(menuBar);
 
         drawImage();
-
-        primaryStage.setTitle("Save Image");
-
-        primaryStage.setScene(scene);
-
-        primaryStage.show();
     }
 
     private void drawImage() {
 
         ImageView imageView = new ImageView();
 
-        WritableImage wImage = new WritableImage((int) root.getWidth(), (int) root.getHeight() - 50);
+        wImage = new WritableImage((int)root.getWidth(), (int)root.getHeight() - 50);
 
         imageView.setImage(wImage);
 
         root.setCenter(imageView);
+
+        renderImage();
+    }
+
+    private void renderImage(){
 
         int cores = Runtime.getRuntime().availableProcessors();
 
@@ -92,16 +108,25 @@ public class ImageSaver extends Application {
             t.start();
         }
 
+        generateFooter(task);
+    }
+
+    private void generateFooter(Renderer task){
+
         ProgressBar bar = new ProgressBar();
         bar.progressProperty().bind(task.progressProperty());
+
         Label label = new Label();
         label.textProperty().bind(task.messageProperty());
+
         root.setBottom(new HBox(bar,label));
     }
 
     private void saveImage(final Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Resource File");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(primaryStage);
 
         if(file != null){
@@ -110,11 +135,26 @@ public class ImageSaver extends Application {
     }
 
     private void saveFile(final File file) {
-        /*WritableImage wim = canvas.snapshot(null, null);
+
+        String fileName = file.getName();
+        String fileExtension = fileName.substring(fileName.indexOf(".") + 1, file.getName().length());
+
+        BufferedImage imageRGB = null;
+
+        if(fileExtension == "png") {
+            imageRGB = SwingFXUtils.fromFXImage(wImage, null);
+        }else{ // workaround for javafx jpg bug
+            BufferedImage image = SwingFXUtils.fromFXImage(wImage, null); // Get buffered image.
+            imageRGB = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_INDEXED);
+            Graphics2D graphics = imageRGB.createGraphics();
+            graphics.drawImage(image, 0, 0, null);
+        }
+
         try {
-            ImageIO.write(SwingFXUtils.fromFXImage(wim, null), "png", file);
-        } catch (Exception e) {
-            System.out.println("Konnte Datei nicht speichern!");
-        }*/
+            ImageIO.write(imageRGB, fileExtension, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Konnte Datei nicht speichern! Error: " + e.getMessage());
+        }
     }
 }

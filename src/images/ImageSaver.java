@@ -17,13 +17,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 
 public class ImageSaver extends Application {
 
@@ -44,14 +42,6 @@ public class ImageSaver extends Application {
 
         scene = new Scene(root, 640, 530);
 
-        /*scene.widthProperty().addListener(e->{
-            drawImage();
-        });
-
-        scene.heightProperty().addListener(e->{
-            drawImage();
-        });*/
-
         setScene(primaryStage);
 
         primaryStage.setTitle("Save Image");
@@ -59,6 +49,8 @@ public class ImageSaver extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
+
+        setScene(primaryStage);
     }
 
     private void setScene(Stage primaryStage){
@@ -71,14 +63,27 @@ public class ImageSaver extends Application {
 
         fileMenu.getItems().add(save);
 
-        MenuBar menuBar = new MenuBar(fileMenu);
+
+
+        MenuItem render = new MenuItem("normal render");
+
+        render.setOnAction(e -> drawImage("normal"));
+
+        MenuItem mtrender = new MenuItem("multithread render");
+
+        mtrender.setOnAction(e -> drawImage("multithread"));
+
+        Menu renderMenu = new Menu("Render");
+
+        renderMenu.getItems().addAll(render, mtrender);
+
+
+        MenuBar menuBar = new MenuBar(fileMenu,renderMenu);
 
         root.setTop(menuBar);
-
-        drawImage();
     }
 
-    private void drawImage() {
+    private void drawImage(String type) {
 
         ImageView imageView = new ImageView();
 
@@ -88,20 +93,29 @@ public class ImageSaver extends Application {
 
         root.setCenter(imageView);
 
-        renderImage();
+        if(type.contains("normal")){
+            renderImage();
+        }else{
+            renderMultiThreadImage();
+        }
     }
 
     private void renderImage(){
+        new Render(wImage).start();
+        root.setBottom(null);
+    }
+
+    private void renderMultiThreadImage(){
 
         int cores = Runtime.getRuntime().availableProcessors();
 
-        Renderer task = null;
+        MultiThreadRender task = null;
 
         startTime = System.currentTimeMillis();
 
         for(int core = 1; core <= cores;core++) {
 
-            task = new Renderer(wImage, cores, core);
+            task = new MultiThreadRender(wImage, cores, core);
 
             Thread t = new Thread(task);
             t.setDaemon(true);
@@ -111,7 +125,7 @@ public class ImageSaver extends Application {
         generateFooter(task);
     }
 
-    private void generateFooter(Renderer task){
+    private void generateFooter(MultiThreadRender task){
 
         ProgressBar bar = new ProgressBar();
         bar.progressProperty().bind(task.progressProperty());
@@ -123,6 +137,7 @@ public class ImageSaver extends Application {
     }
 
     private void saveImage(final Stage primaryStage) {
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Resource File");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png");

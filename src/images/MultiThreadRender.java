@@ -12,14 +12,14 @@ import java.awt.image.WritableRenderedImage;
  * @author roberto
  * @
  */
-public class Renderer extends Task {
+public class MultiThreadRender extends Task {
 
     private PixelWriter pixelWriter;
     private WritableImage wImage;
     private int cores;
     private int core;
 
-    public Renderer(WritableImage wImage,int cores, int core) {
+    public MultiThreadRender(WritableImage wImage, int cores, int core) {
         this.wImage = wImage;
         this.pixelWriter =  wImage.getPixelWriter();
         this.cores = cores;
@@ -44,7 +44,7 @@ public class Renderer extends Task {
                 Platform.runLater(new Runnable() {
                     public void run() {
 
-                        pixelWriter.setColor((int)finalReadX, (int)finalReadY, getColor(finalReadX, finalReadY));
+                        pixelWriter.setColor((int) finalReadX, (int) finalReadY, getColor(finalReadX, finalReadY));
 
                         updateProgress(ImageSaver.counter++, img_size);
                         updateTime(img_size);

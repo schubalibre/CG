@@ -8,7 +8,6 @@ import Tools.Ray;
  * Created by roberto on 25/10/15.
  */
 public class OrthographicCamera extends Camera{
-
     public final double angle;
 
     public OrthographicCamera(Point3 e, Vector3 g, Vector3 t, double angle) {

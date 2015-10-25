@@ -8,7 +8,6 @@ import Tools.Ray;
  * Created by roberto on 25/10/15.
  */
 public class PerspectiveCamera extends Camera{
-
     public final double angle;
 
     public PerspectiveCamera(Point3 e, Vector3 g, Vector3 t, double angle) {

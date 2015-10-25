@@ -4,7 +4,6 @@ package Tools;
  * Created by roberto on 25/10/15.
  */
 public class Color {
-
     public final double r;
     public final double g;
     public final double b;

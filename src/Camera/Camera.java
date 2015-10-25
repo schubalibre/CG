@@ -8,7 +8,6 @@ import Tools.Ray;
  * Created by roberto on 25/10/15.
  */
 public abstract class Camera {
-
     public final Point3 e;
     public final Vector3 g;
     public final Vector3 t;
@@ -17,12 +16,21 @@ public abstract class Camera {
     public final Vector3 w;
 
     public Camera(Point3 e, Vector3 g, Vector3 t) {
+        if (e == null) {
+            throw new IllegalArgumentException("The Point  e cannot be null!");
+        }
+        if (g == null) {
+            throw new IllegalArgumentException("The Vector g cannot be null!");
+        }
+        if (t == null) {
+            throw new IllegalArgumentException("The Vector t cannot be null!");
+        }
         this.e = e;
         this.g = g;
         this.t = t;
-        this.u = new Vector3(0,0,0);
-        this.v = new Vector3(0,0,0);
-        this.w = new Vector3(0,0,0);
+        this.w = new Vector3(-(g.x / g.magnitude), -(g.y / g.magnitude), -(g.z / g.magnitude));
+        this.u = new Vector3(t.x(w).x / t.x(w).magnitude, t.x(w).y / t.x(w).magnitude, t.x(w).z / t.x(w).magnitude);
+        this.v = new Vector3(w.x(u).x, w.x(u).y, w.x(u).z);
     }
 
     public Ray rayFor(int w, int h, int x, int y){

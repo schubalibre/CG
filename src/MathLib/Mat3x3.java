@@ -1,4 +1,4 @@
-package matVecLib;
+package MathLib;
 
 /**
  * Created by roberto on 07/10/15.
@@ -57,7 +57,7 @@ public class Mat3x3 {
     /**
      *
      * @param m
-     * @return
+     * @return Mat3x3
      */
     public Mat3x3 mul(Mat3x3 m) {
 
@@ -81,7 +81,7 @@ public class Mat3x3 {
     /**
      *
      * @param v
-     * @return
+     * @return Vector3
      */
     public Vector3 mul(Vector3 v) {
 
@@ -97,7 +97,7 @@ public class Mat3x3 {
     /**
      *
      * @param p
-     * @return
+     * @return Point3
      */
     public Point3 mul(Point3 p) {
 
@@ -113,7 +113,7 @@ public class Mat3x3 {
     /**
      *
      * @param v
-     * @return
+     * @return Mat3x3
      */
     public Mat3x3 changeCol1(Vector3 v) {
         return new Mat3x3(
@@ -126,7 +126,7 @@ public class Mat3x3 {
     /**
      *
      * @param v
-     * @return
+     * @return Mat3x3
      */
     public Mat3x3 changeCol2(Vector3 v) {
         return new Mat3x3(
@@ -136,6 +136,11 @@ public class Mat3x3 {
         );
     }
 
+    /**
+     *
+     * @param v
+     * @return Mat3x3
+     */
     public Mat3x3 changeCol3(Vector3 v) {
         return new Mat3x3(
                 m11, m12, v.x,
@@ -146,7 +151,7 @@ public class Mat3x3 {
 
     /**
      *
-     * @return
+     * @return double
      */
     private double det() {
         return m11 * m22 * m33

@@ -1,6 +1,4 @@
-package matVecLib;
-
-import java.util.Vector;
+package MathLib;
 
 /**
  * Created by roberto on 07/10/15.

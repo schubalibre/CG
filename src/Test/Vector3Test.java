@@ -1,8 +1,13 @@
-package matVecLib;
+package Test;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import MathLib.Vector3;
+import MathLib.Normal3;
+
 
 /**
  * Created by roberto on 10/10/15.
@@ -77,7 +82,7 @@ public class Vector3Test {
         Vector3 v = new Vector3(-0.707, 0.707, 0);
         Normal3 n = new Normal3(0,1,0);
         Vector3 r = v.reflectedOn(n);
-        assertEquals(new Vector3(0.707,0.707,0),r);
+        Assert.assertEquals(new Vector3(0.707, 0.707, 0), r);
     }
 
     @Test
@@ -85,7 +90,7 @@ public class Vector3Test {
         Vector3 v = new Vector3(0.707, 0.707, 0);
         Normal3 n = new Normal3(1,0,0);
         Vector3 r = v.reflectedOn(n);
-        assertEquals(new Vector3(0.707,-0.707,0),r);
+        Assert.assertEquals(new Vector3(0.707, -0.707, 0), r);
     }
 
     @Test
@@ -96,7 +101,7 @@ public class Vector3Test {
     @Test
     public void magnitude() {
         Vector3 v = new Vector3(1,1,1);
-        assertEquals(v.magnitude,Math.sqrt(3),0);
+        Assert.assertEquals(v.magnitude, Math.sqrt(3), 0);
     }
 
 

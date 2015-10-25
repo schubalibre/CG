@@ -1,4 +1,4 @@
-package matVecLib;
+package MathLib;
 
 /**
  * Created by roberto on 07/10/15.

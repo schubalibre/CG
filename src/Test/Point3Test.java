@@ -1,8 +1,11 @@
-package matVecLib;
+package Test;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import MathLib.Vector3;
+import MathLib.Point3;
 
 /**
  * Created by roberto on 10/10/15.

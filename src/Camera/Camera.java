@@ -6,6 +6,7 @@ import Tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.
+ * @author Robert Dziuba
  */
 public abstract class Camera {
     public final Point3 e;
@@ -15,6 +16,13 @@ public abstract class Camera {
     public final Vector3 v;
     public final Vector3 w;
 
+
+    /**
+     *
+     * @param e eye position
+     * @param g gaze direction
+     * @param t up vector
+     */
     public Camera(Point3 e, Vector3 g, Vector3 t) {
         if (e == null) {
             throw new IllegalArgumentException("The Point  e cannot be null!");
@@ -28,14 +36,22 @@ public abstract class Camera {
         this.e = e;
         this.g = g;
         this.t = t;
-        this.w = new Vector3(-(g.x / g.magnitude), -(g.y / g.magnitude), -(g.z / g.magnitude));
+        /**
+         * w = - g/|g|
+         */
+
+        this.w = g.normalized().mul(-1);
+        /**
+         * u = t x w / |t x w|
+         */
         this.u = new Vector3(t.x(w).x / t.x(w).magnitude, t.x(w).y / t.x(w).magnitude, t.x(w).z / t.x(w).magnitude);
+        /**
+         * v = w x u - w und u sind schon normalisiert
+         */
         this.v = new Vector3(w.x(u).x, w.x(u).y, w.x(u).z);
     }
 
-    public Ray rayFor(int w, int h, int x, int y){
-        return null;
-    }
+    public abstract Ray rayFor(int w, int h, int x, int y);
 
     @Override
     public String toString() {

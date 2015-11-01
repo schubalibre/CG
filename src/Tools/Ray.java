@@ -9,7 +9,13 @@ import MathLib.Vector3;
 
 public class Ray {
 
+    /**
+     * The Point of the origin
+     */
     public final Point3 o;
+    /**
+     * The Vector of the direction
+     */
     public final Vector3 d;
 
     public Ray(Point3 o, Vector3 d) {
@@ -40,7 +46,7 @@ public class Ray {
             throw new IllegalArgumentException("The Point cannot be null!");
         }
         //|p − <o,d>| /  <d,d>
-        return (p.sub(o).dot(d)) / d.dot(d);
+        return (p.sub(o).magnitude) / d.magnitude;
     }
 
     @Override

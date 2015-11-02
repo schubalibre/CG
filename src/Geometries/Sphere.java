@@ -13,11 +13,51 @@ public class Sphere extends Geometry {
 
     public Sphere(Color color, Point3 c, double r) {
         super(color);
+        if (c == null) {
+            throw new IllegalArgumentException("The c cannot be null!");
+        }
         this.c = c;
         this.r = r;
     }
 
     public Hit hit(Ray r){
+
+        // t = (-b +- wurzel b2 - 4 * ac) / 2a
+
+        final double a = r.d.dot(r.d);
+        final double b = r.d.dot(r.o.sub(c).mul(2));
+        final double cn = r.o.sub(c).dot(r.o.sub(c))-(this.r * this.r);
+
+        // d = b2 - 4ac
+        final double d = (b*b) - (4 * a * cn);
+
+        if (d > 0) {
+
+            final double t1 = (-b + Math.sqrt(d)) / (2 * a);
+            final double t2 = (-b - Math.sqrt(d)) / (2 * a);
+
+            /*double t = Constants.EPSILON;
+
+            if(t2 < Constants.EPSILON && t1 < Constants.EPSILON){
+                t = Math.max(t1, t2);
+            }
+            if(t2 > Constants.EPSILON && t1 > Constants.EPSILON){
+                t = Math.min(t1,t2);
+            }
+            if(t2 > Constants.EPSILON && t1 < Constants.EPSILON){
+                t = t2;
+            }
+
+            if(t2 < Constants.EPSILON && t1 > Constants.EPSILON){
+                t = t1;
+            }
+
+            if(t > Constants.EPSILON){
+                final Normal3 normal = ray.at(t).sub(this.c).normalized().asNormal();
+                return new Hit(t, ray, this,normal,texFor(ray.at(t)));
+            }*/
+        }
+
         return null;
     }
 

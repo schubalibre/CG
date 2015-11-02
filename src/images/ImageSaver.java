@@ -63,8 +63,6 @@ public class ImageSaver extends Application {
 
         fileMenu.getItems().add(save);
 
-
-
         MenuItem render = new MenuItem("normal render");
 
         render.setOnAction(e -> drawImage("normal"));
@@ -154,11 +152,9 @@ public class ImageSaver extends Application {
         String fileName = file.getName();
         String fileExtension = fileName.substring(fileName.indexOf(".") + 1, file.getName().length());
 
-        BufferedImage imageRGB = null;
+        BufferedImage imageRGB = SwingFXUtils.fromFXImage(wImage, null);;
 
-        if(fileExtension == "png") {
-            imageRGB = SwingFXUtils.fromFXImage(wImage, null);
-        }else{ // workaround for javafx jpg bug
+        if(fileExtension != "png") {// workaround for javafx jpg bug
             BufferedImage image = SwingFXUtils.fromFXImage(wImage, null); // Get buffered image.
             imageRGB = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_INDEXED);
             Graphics2D graphics = imageRGB.createGraphics();

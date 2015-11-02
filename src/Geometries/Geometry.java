@@ -6,16 +6,17 @@ import Tools.Ray;
 /**
  * Created by roberto on 25/10/15.
  */
-public class Geometry {
+public abstract class Geometry {
     public final Color color;
 
     public Geometry(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("The Color cannot be null!");
+        }
         this.color = color;
     }
 
-    public Hit hit(Ray r){
-        return null;
-    }
+    public abstract Hit hit(Ray r);
 
     @Override
     public String toString() {

@@ -6,9 +6,10 @@ import Tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.
+ *
  * @author Robert Dziuba
  */
-public class OrthographicCamera extends Camera{
+public class OrthographicCamera extends Camera {
 
     public final double s;
 
@@ -20,11 +21,16 @@ public class OrthographicCamera extends Camera{
     @Override
     public Ray rayFor(int w, int h, int x, int y) {
 
-        // d = -w
-        // a = w/h
+        // d= -w
         // o = e + a * s * (x - w-1/s) / w-1 * u + s * (y - h-1/2) / h-1 * v
 
-        return null;
+        final int a = w / h;
+        final Vector3 ux = u.mul((x - ((w - 1) / 2)) / (w - 1)).mul(s).mul(a);
+        final Vector3 vy = v.mul((y - ((h - 1) / 2)) / (w - 1)).mul(s);
+        final Point3 o = e.add(ux.add(vy));
+        final Vector3 d = super.w.mul(-1);
+
+        return new Ray(o, d);
     }
 
     @Override

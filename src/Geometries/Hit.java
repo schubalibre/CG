@@ -11,6 +11,12 @@ public class Hit {
     public final Geometry geo;
 
     public Hit(double t, Ray ray, Geometry geo) {
+        if (ray == null) {
+            throw new IllegalArgumentException("The Ray cannot be null!");
+        }
+        if (geo == null) {
+            throw new IllegalArgumentException("The Geometry cannot be null!");
+        }
         this.t = t;
         this.ray = ray;
         this.geo = geo;

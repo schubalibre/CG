@@ -14,12 +14,29 @@ public class Plane extends Geometry{
 
     public Plane(Color color, Point3 a, Normal3 n) {
         super(color);
+
+        if (a == null) {
+            throw new IllegalArgumentException("The a cannot be null!");
+        }
+        if (n == null) {
+            throw new IllegalArgumentException("The n cannot be null!");
+        }
+
         this.a = a;
         this.n = n;
     }
 
     public Hit hit(Ray r){
-        return null;
+        if (r == null) {
+            throw new IllegalArgumentException("The r cannot be null!");
+        }
+        // t = ((a - o) · n)/ (d · n)
+
+        double t = (n.dot(a.sub(r.o)) / r.d.dot(n));
+        Ray ray = r;
+        Geometry geo = this;
+
+        return new Hit(t, ray, geo);
     }
 
     @Override

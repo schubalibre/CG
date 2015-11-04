@@ -1,8 +1,8 @@
-package Camera;
+package camera;
 
-import MathLib.Point3;
-import MathLib.Vector3;
-import Tools.Ray;
+import mathLib.Point3;
+import mathLib.Vector3;
+import tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.

@@ -1,11 +1,11 @@
-package Test;
+package test;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import MathLib.Vector3;
-import MathLib.Point3;
+import mathLib.Vector3;
+import mathLib.Point3;
 
 /**
  * Created by roberto on 10/10/15.

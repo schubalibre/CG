@@ -1,8 +1,8 @@
-package Camera;
+package camera;
 
-import MathLib.Point3;
-import MathLib.Vector3;
-import Tools.Ray;
+import mathLib.Point3;
+import mathLib.Vector3;
+import tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.
@@ -21,16 +21,13 @@ public class PerspectiveCamera extends Camera {
     public Ray rayFor(int w, int h, int x, int y) {
 
         // o = e
-        // r = -w * (h/2/ tan alpha) +(x - w-1/s) * u + (y - h-1/2) * v
-
-        final Point3 o = e;
+        // r = -w * (h/2/ tan alpha/2) +(x - w-1/2) * u + (y - h-1/2) * v
 
         final Vector3 ux = u.mul(x - ((w - 1) / 2));
         final Vector3 vy = v.mul(y - ((h - 1) / 2));
-        final Vector3 r = super.w.mul(-1).mul((h / 2) / Math.tan(angle)).add(ux.add(vy));
-        final Vector3 d = r.normalized();
+        final Vector3 r = this.w.mul(-1).mul((h / 2) / Math.tan(angle / 2)).add(ux.add(vy));
 
-        return new Ray(o, d);
+        return new Ray(e, r.normalized());
     }
 
     @Override

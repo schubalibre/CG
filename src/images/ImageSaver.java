@@ -63,7 +63,7 @@ public class ImageSaver extends Application {
 
         fileMenu.getItems().add(save);
 
-        MenuItem render = new MenuItem("normal render");
+        MenuItem render = new MenuItem("pixel render");
 
         render.setOnAction(e -> drawImage("normal"));
 
@@ -71,7 +71,7 @@ public class ImageSaver extends Application {
 
         mtrender.setOnAction(e -> drawImage("multithread"));
 
-        Menu renderMenu = new Menu("Render");
+        Menu renderMenu = new Menu("Rendering");
 
         renderMenu.getItems().addAll(render, mtrender);
 
@@ -99,7 +99,7 @@ public class ImageSaver extends Application {
     }
 
     private void renderImage(){
-        new Render(wImage).start();
+        new PixelRender(wImage).start();
         root.setBottom(null);
     }
 

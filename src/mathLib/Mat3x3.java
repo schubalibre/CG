@@ -1,4 +1,4 @@
-package MathLib;
+package mathLib;
 
 /**
  * Created by roberto on 07/10/15.

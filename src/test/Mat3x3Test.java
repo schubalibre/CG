@@ -1,10 +1,10 @@
-package Test;
+package test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import MathLib.Mat3x3;
-import MathLib.Vector3;
-import MathLib.Point3;
+import mathLib.Mat3x3;
+import mathLib.Vector3;
+import mathLib.Point3;
 
 
 /**

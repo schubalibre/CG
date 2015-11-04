@@ -1,10 +1,10 @@
-package Test;
+package test;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import MathLib.Normal3;
-import MathLib.Vector3;
+import mathLib.Normal3;
+import mathLib.Vector3;
 
 
 /**

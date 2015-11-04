@@ -1,31 +1,68 @@
 package images;
 
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
+import geometries.AxisAlignedBox;
+import geometries.Plane;
+import geometries.Sphere;
+import geometries.Triangle;
+import mathLib.Normal3;
+import mathLib.Point3;
+import mathLib.Vector3;
+import tools.Color;
+import tools.World;
+import camera.Camera;
+import camera.PerspectiveCamera;
 
 /**
- * Created by roberto on 16.10.15.
+ * Created by roberto on 03.11.15.
  */
-public class Render {
+public abstract class Render {
 
-    private WritableImage wImage;
-    private PixelWriter pixelWriter;
+    protected Camera cam;
+    protected World world;
 
-    public Render(WritableImage wImage) {
-        this.wImage = wImage;
-        this.pixelWriter =  wImage.getPixelWriter();
+    public Render() {
+        initCam();
+        initWorld();
     }
 
-    public void start(){
-        for (double readY = 0; readY < wImage.getHeight(); readY++) {
-            for (double readX = 0; readX < wImage.getWidth(); readX++) {
-                pixelWriter.setColor((int) readX, (int) readY, getColor(readX, readY));
-            }
-        }
+    public abstract void start();
+
+    private void initWorld() {
+        world = new World(new tools.Color(0,0,0));
+
+        world.addObject(new Plane(
+                new Color(0,1,0),
+                new Point3(0,-1,0),
+                new Normal3(0,1,0)
+        ));
+
+        world.addObject(new Sphere(
+                new Color(1,0,0),
+                new Point3(0,0,-3),
+                0.5
+        ));
+
+        world.addObject(new Triangle(
+                new Point3(-0.5, 0.5, -3),
+                new Point3(0.5,0.5,-3),
+                new Point3(0.5,-0.5,-3),
+                new Color(1,0,1)
+        ));
+
+        world.addObject(new AxisAlignedBox(
+                new Color(0,0,1),
+                new Point3(-0.5,0,-0.5),
+                new Point3(0.5,1,0.5)
+
+        ));
     }
 
-    private Color getColor(double readX, double readY) {
-        return (readX == readY) ? javafx.scene.paint.Color.RED : javafx.scene.paint.Color.BLACK;
+    private void initCam() {
+        final Point3 e = new Point3(3,3,3);
+        final Vector3 g = new Vector3(-3,-3,-3);
+        final Vector3 t = new Vector3(0,1,0);
+        final double angle = Math.PI/4;
+
+        cam = new PerspectiveCamera(e,g,t,angle);
     }
 }

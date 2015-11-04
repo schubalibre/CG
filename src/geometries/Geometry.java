@@ -1,7 +1,7 @@
-package Geometries;
+package geometries;
 
-import Tools.Color;
-import Tools.Ray;
+import tools.Color;
+import tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.

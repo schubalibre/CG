@@ -1,6 +1,6 @@
-package Geometries;
+package geometries;
 
-import Tools.Ray;
+import tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.

@@ -1,14 +1,14 @@
-package Geometries;
+package geometries;
 
-import MathLib.Normal3;
-import MathLib.Point3;
-import Tools.Color;
-import Tools.Ray;
+import mathLib.Normal3;
+import mathLib.Point3;
+import tools.Color;
+import tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.
  */
-public class Plane extends Geometry{
+public class Plane extends Geometry {
     public final Point3 a;
     public final Normal3 n;
 
@@ -26,17 +26,19 @@ public class Plane extends Geometry{
         this.n = n;
     }
 
-    public Hit hit(Ray r){
+    public Hit hit(Ray r) {
         if (r == null) {
             throw new IllegalArgumentException("The r cannot be null!");
         }
         // t = ((a - o) · n)/ (d · n)
 
-        double t = (n.dot(a.sub(r.o)) / r.d.dot(n));
-        Ray ray = r;
-        Geometry geo = this;
+        final double nenner = r.d.dot(n);
 
-        return new Hit(t, ray, geo);
+        if (nenner != 0) {
+            double t = n.dot(a.sub(r.o)) / nenner;
+            if (t > 0) return new Hit(t, r, this);
+        }
+        return null;
     }
 
     @Override

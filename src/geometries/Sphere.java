@@ -1,8 +1,8 @@
-package Geometries;
+package geometries;
 
-import MathLib.Point3;
-import Tools.Color;
-import Tools.Ray;
+import mathLib.Point3;
+import tools.Color;
+import tools.Ray;
 
 /**
  * Created by roberto on 25/10/15.
@@ -21,6 +21,9 @@ public class Sphere extends Geometry {
     }
 
     public Hit hit(Ray r){
+        if (r == null) {
+            throw new IllegalArgumentException("The r cannot be null!");
+        }
 
         // t = (-b +- wurzel b2 - 4 * ac) / 2a
 
@@ -32,30 +35,12 @@ public class Sphere extends Geometry {
         final double d = (b*b) - (4 * a * cn);
 
         if (d > 0) {
-
             final double t1 = (-b + Math.sqrt(d)) / (2 * a);
             final double t2 = (-b - Math.sqrt(d)) / (2 * a);
-
-            /*double t = Constants.EPSILON;
-
-            if(t2 < Constants.EPSILON && t1 < Constants.EPSILON){
-                t = Math.max(t1, t2);
-            }
-            if(t2 > Constants.EPSILON && t1 > Constants.EPSILON){
-                t = Math.min(t1,t2);
-            }
-            if(t2 > Constants.EPSILON && t1 < Constants.EPSILON){
-                t = t2;
-            }
-
-            if(t2 < Constants.EPSILON && t1 > Constants.EPSILON){
-                t = t1;
-            }
-
-            if(t > Constants.EPSILON){
-                final Normal3 normal = ray.at(t).sub(this.c).normalized().asNormal();
-                return new Hit(t, ray, this,normal,texFor(ray.at(t)));
-            }*/
+            return new Hit(Math.min(t1,t2), r, this);
+        }else if(d == 0){
+            final double t = -b / (2 * a);
+            return new Hit(t, r, this);
         }
 
         return null;

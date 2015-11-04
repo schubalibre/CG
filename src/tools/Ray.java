@@ -1,7 +1,7 @@
-package Tools;
+package tools;
 
-import MathLib.Point3;
-import MathLib.Vector3;
+import mathLib.Point3;
+import mathLib.Vector3;
 
 /**
  * Created by roberto on 24/10/15.

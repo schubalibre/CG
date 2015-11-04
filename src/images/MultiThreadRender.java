@@ -1,12 +1,17 @@
 package images;
 
+import geometries.Plane;
+import mathLib.Normal3;
+import mathLib.Point3;
+import mathLib.Vector3;
+import tools.World;
+import camera.Camera;
+import camera.PerspectiveCamera;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-
-import java.awt.image.WritableRenderedImage;
 
 /**
  * @author roberto
@@ -19,11 +24,16 @@ public class MultiThreadRender extends Task {
     private int cores;
     private int core;
 
+    private Camera cam;
+    private World world;
+
     public MultiThreadRender(WritableImage wImage, int cores, int core) {
         this.wImage = wImage;
         this.pixelWriter =  wImage.getPixelWriter();
         this.cores = cores;
         this.core = core;
+        initCam();
+        initWorld();
     }
 
     @Override
@@ -77,7 +87,27 @@ public class MultiThreadRender extends Task {
         updateMessage("elapsed Time: " + elapsedTime + "sec. estimated Time: " + estimatedTime + " sec.");
     }
 
+    private void initWorld() {
+        world = new World(new tools.Color(0,0,0));
+
+        world.addObject(new Plane(
+                new tools.Color(0,1,0),
+                new Point3(0,-1,0),
+                new Normal3(0,1,0)
+        ));
+    }
+
+    private void initCam() {
+        final Point3 e = new Point3(0,0,0);
+        final Vector3 g = new Vector3(0,0,-1);
+        final Vector3 t = new Vector3(0,1,0);
+        final double angle = Math.PI/4;
+
+        cam = new PerspectiveCamera(e,g,t,angle);
+    }
+
     private Color getColor(double readX, double readY) {
-        return (readX == readY) ? Color.RED : Color.BLACK;
+        final tools.Color color = world.hit(cam.rayFor((int) wImage.getWidth(), (int) wImage.getHeight(), (int) readX, (int) readY));
+        return new javafx.scene.paint.Color(color.r, color.g, color.b,1);
     }
 }

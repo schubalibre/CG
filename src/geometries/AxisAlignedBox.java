@@ -58,9 +58,9 @@ public class AxisAlignedBox extends Geometry{
         Hit max = null;
 
         for(Plane plane : planes){
-            final double con = plane.a.sub(r.o).dot(plane.n);
+            final double con = r.o.sub(plane.a).dot(plane.n);
             if(con > 0) {
-                final double t = con / r.d.dot(plane.n);
+                final double t = plane.a.sub(r.o).dot(plane.n) / r.d.dot(plane.n);
                 if (max == null || t > max.t) {
                     max = new Hit(t, r, this);
                 }

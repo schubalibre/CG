@@ -58,6 +58,11 @@ public abstract class Render {
     }
 
     private void initCam() {
+        /*final Point3 e = new Point3(0,0,0);
+        final Vector3 g = new Vector3(0,0,-1);
+        final Vector3 t = new Vector3(0,1,0);
+        final double angle = Math.PI/4;*/
+
         final Point3 e = new Point3(3,3,3);
         final Vector3 g = new Vector3(-3,-3,-3);
         final Vector3 t = new Vector3(0,1,0);

@@ -5,13 +5,27 @@ import tools.Color;
 import tools.Ray;
 
 /**
- * Created by roberto on 25/10/15.
+ * This class represents a Sphere Object.
+ * @author Robert Dziuba on 25/10/15.
  */
 public class Sphere extends Geometry {
-    public final Point3 c;
-    public final double r;
+    /**
+     * The point of center of the Sphere.
+     */
+    private final Point3 c;
+    /**
+     * The radius of the Sphere.
+     */
+    private final double r;
 
-    public Sphere(Color color, Point3 c, double r) {
+    /**
+     * Instantiates a new Sphere Object.
+     * @param color of the Sphere. Can't be null.
+     * @param c of the Sphere. Can't be null.
+     * @param r of the Sphere. Can't be null.
+     * @throws IllegalArgumentException if one of the given arguments are null.
+     */
+    public Sphere(final Color color, final Point3 c, double r) {
         super(color);
         if (c == null) {
             throw new IllegalArgumentException("The c cannot be null!");
@@ -20,13 +34,13 @@ public class Sphere extends Geometry {
         this.r = r;
     }
 
+    @Override
     public Hit hit(Ray r){
         if (r == null) {
             throw new IllegalArgumentException("The r cannot be null!");
         }
 
         // t = (-b +- wurzel b2 - 4 * ac) / 2a
-
         final double a = r.d.dot(r.d);
         final double b = r.d.dot(r.o.sub(c).mul(2));
         final double cn = r.o.sub(c).dot(r.o.sub(c))-(this.r * this.r);

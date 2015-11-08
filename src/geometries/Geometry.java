@@ -4,19 +4,33 @@ import tools.Color;
 import tools.Ray;
 
 /**
- * Created by roberto on 25/10/15.
+ * This abstract class provides a parent for all Geometry Objects
+ * @author Robert Dziuba on 25/10/15.
  */
 public abstract class Geometry {
+    /**
+     * The current color of the Geometry child class.
+     */
     public final Color color;
 
-    public Geometry(Color color) {
+    /**
+     * Instantiates a new Geometry.
+     * @param color of child class. Can't be null.
+     * @throws IllegalArgumentException if the given argument is null.
+     */
+    public Geometry(final Color color) {
         if (color == null) {
             throw new IllegalArgumentException("The Color cannot be null!");
         }
         this.color = color;
     }
 
-    public abstract Hit hit(Ray r);
+    /**
+     * abstract hit method
+     * @param r the ray
+     * @return a Hit
+     */
+    public abstract Hit hit(final Ray r);
 
     @Override
     public String toString() {

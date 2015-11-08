@@ -7,22 +7,52 @@ import tools.Color;
 import tools.Ray;
 
 /**
- * Created by roberto on 03.11.15.
+ * This class represents a Triangle Object.
+ * @ Robert Dziuba on 03.11.15.
  */
 public class Triangle extends Geometry{
-    final private Point3 a;
-    final private Point3 b;
-    final private Point3 c;
+    /**
+     * The a corner point of the Triangle.
+     */
+    private final Point3 a;
+    /**
+     * The b corner point of the Triangle.
+     */
+    private final Point3 b;
+    /**
+     * The c corner point of the Triangle.
+     */
+    private final Point3 c;
 
-    public Triangle(Point3 a, Point3 b, Point3 c, Color color) {
+    /**
+     * Instantiates a new Triangle Object.
+     * @param a corner point of the Sphere. Can't be null.
+     * @param b corner point of the Sphere. Can't be null.
+     * @param c corner point of the Sphere. Can't be null.
+     * @param color of the Sphere. Can't be null.
+     * @throws IllegalArgumentException if one of the given arguments are null.
+     */
+    public Triangle(final Point3 a,final Point3 b,final Point3 c,final Color color) {
         super(color);
+        if (a == null) {
+            throw new IllegalArgumentException("The a cannot be null!");
+        }
+        if (b == null) {
+            throw new IllegalArgumentException("The b cannot be null!");
+        }
+        if (c == null) {
+            throw new IllegalArgumentException("The c cannot be null!");
+        }
         this.a = a;
         this.b = b;
         this.c = c;
     }
 
     @Override
-    public Hit hit(Ray r) {
+    public Hit hit(final Ray r) {
+        if (r == null) {
+            throw new IllegalArgumentException("The r cannot be null!");
+        }
 
         // M x = V
 
@@ -48,5 +78,37 @@ public class Triangle extends Geometry{
         }
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Triangle{" +
+                "a=" + a +
+                ", b=" + b +
+                ", c=" + c +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Triangle triangle = (Triangle) o;
+
+        if (a != null ? !a.equals(triangle.a) : triangle.a != null) return false;
+        if (b != null ? !b.equals(triangle.b) : triangle.b != null) return false;
+        return !(c != null ? !c.equals(triangle.c) : triangle.c != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (a != null ? a.hashCode() : 0);
+        result = 31 * result + (b != null ? b.hashCode() : 0);
+        result = 31 * result + (c != null ? c.hashCode() : 0);
+        return result;
     }
 }

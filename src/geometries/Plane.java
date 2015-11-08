@@ -6,13 +6,27 @@ import tools.Color;
 import tools.Ray;
 
 /**
- * Created by roberto on 25/10/15.
+ * This class represents a Plane Object.
+ * @author Robert Dziuba on 25/10/15.
  */
 public class Plane extends Geometry {
-    public final Point3 a;
-    public final Normal3 n;
+    /**
+     * A known Point.
+     */
+    protected final Point3 a;
+    /**
+     * A Normal of the Plane.
+     */
+    protected final Normal3 n;
 
-    public Plane(Color color, Point3 a, Normal3 n) {
+    /**
+     * Instantiates a new Plane Object.
+     * @param color of the Plane. Can't be null.
+     * @param a of the Plane. Can't be null.
+     * @param n of the Plane. Can't be null.
+     * @throws IllegalArgumentException if one of the given arguments are null.
+     */
+    public Plane(final Color color, final Point3 a, final Normal3 n) {
         super(color);
 
         if (a == null) {
@@ -26,16 +40,17 @@ public class Plane extends Geometry {
         this.n = n;
     }
 
-    public Hit hit(Ray r) {
+    @Override
+    public Hit hit(final Ray r) {
         if (r == null) {
             throw new IllegalArgumentException("The r cannot be null!");
         }
-        // t = ((a - o) · n)/ (d · n)
 
+        // t = ((a - o) · n)/ (d · n)
         final double nenner = r.d.dot(n);
 
         if (nenner != 0) {
-            double t = n.dot(a.sub(r.o)) / nenner;
+            final double t = n.dot(a.sub(r.o)) / nenner;
             if (t > 0) return new Hit(t, r, this);
         }
         return null;

@@ -3,14 +3,15 @@ package geometries;
 import tools.Ray;
 
 /**
- * Created by roberto on 25/10/15.
+ * Created by
+ * @author Robert Dziuba on 25/10/15.
  */
 public class Hit {
     public final double t;
     public final Ray ray;
     public final Geometry geo;
 
-    public Hit(double t, Ray ray, Geometry geo) {
+    public Hit(final double t, final Ray ray, final Geometry geo) {
         if (ray == null) {
             throw new IllegalArgumentException("The Ray cannot be null!");
         }
